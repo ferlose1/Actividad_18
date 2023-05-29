@@ -1,0 +1,39 @@
+﻿@page "/Clases/Nuevo"
+@using Actividad_18.Shared.Models;
+@inject HttpClient http
+@inject NavigationManager navegar
+
+
+<h3>Clase Nueva</h3>
+
+<EditForm Model="lasclases" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label for="txtNombre" class="form-label">Nombre</label>
+        <InputText id="txtNombre" class="form-control" @bind-Value="lasclases.Nombre" />
+    </div>
+    <div class="mb-3">
+        <label for="numPeso" class="form-label">Fecha</label>
+        <InputDate id="numPeso" class="form-control" @bind-Value="lasclases.Fecha" />
+    </div>
+    <div class="mb-3">
+        <label for="numMts" class="form-label">Encargado</label>
+        <InputText id="numMts" class="form-control" @bind-Value="lasclases.Encargado" />
+    </div>
+    <div class="mb-3">
+        <label for="numCm" class="form-label">Id del Cliente</label>
+        <InputNumber id="numCm" class="form-control" @bind-Value="lasclases.ClientesId" />
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</EditForm>
+
+@code {
+    private Clases lasclases = new Clases();
+    private async void Guardar()
+    {
+        await http.PostAsJsonAsync("api/Clases", lasclases);
+        navegar.NavigateTo("/ClasesT");
+    }
+}

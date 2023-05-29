@@ -1,0 +1,74 @@
+﻿@page "/ClientesT"
+@using Actividad_18.Shared.Models
+@inject HttpClient http
+@inject NavigationManager navegar
+
+
+<h3>Clientes Totales</h3>
+
+<button class="btn btn-primary" @onclick=Agregar><span class="oi oi-plus"> Agregar Cliente</span></button>
+
+@if (loscliente == null)
+{
+    <h2>Cargando ...</h2>
+}else if (loscliente.Count() == 0)
+{
+    <h2>No existen Registros</h2>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var i in loscliente)
+            {
+                <tr>
+                    <td>@i.id</td>
+                    <td>@i.nombre</td>
+                    <td>@i.direccion</td>
+                    <td>@i.telefono</td>
+                    <td>@i.correo</td>
+                    <td>@i.fnacimiento</td>
+                    <td><button class="btn btn-warning" @onclick="(()=>cambiar(Convert.ToInt32(i.id)))">Cambiar Datos</button></td>
+                    <td><button class="btn btn-danger" @onclick="(()=>borrar(i))">Borrar</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<Clientes> loscliente = new List<Clientes>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        loscliente = await http.GetFromJsonAsync<List<Clientes>>("api/Clientes");
+    }
+
+    public void Agregar()
+    {
+        navegar.NavigateTo("/Clientes/Nuevo");
+    }
+
+    private void cambiar(int Id)
+    {
+        navegar.NavigateTo($"/Clientes/Editar/{Id}");
+    }
+
+    public async Task borrar(Clientes c)
+    {
+        await http.DeleteAsync($"api/Clientes/{c.id}");
+        loscliente.Remove(c);
+    }
+}

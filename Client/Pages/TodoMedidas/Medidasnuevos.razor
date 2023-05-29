@@ -1,0 +1,47 @@
+﻿@page "/Medidas/Nuevo"
+@using Actividad_18.Shared.Models;
+@inject HttpClient http
+@inject NavigationManager navegar
+
+
+<h3>Medidas Nuevas</h3>
+
+<EditForm Model="lasmedidas" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label for="txtNombre" class="form-label">Nombre</label>
+        <InputText id="txtNombre" class="form-control" @bind-Value="lasmedidas.NombreCliente" />
+    </div>
+    <div class="mb-3">
+        <label for="numPeso" class="form-label">Peso KG</label>
+        <InputNumber id="numPeso" class="form-control" @bind-Value="lasmedidas.peso" />
+    </div>
+    <div class="mb-3">
+        <label for="numMts" class="form-label">Altura Mts</label>
+        <InputNumber id="numMts" class="form-control" @bind-Value="lasmedidas.altura" />
+    </div>
+    <div class="mb-3">
+        <label for="numCm" class="form-label">Cintura Cm</label>
+        <InputNumber id="numCm" class="form-control" @bind-Value="lasmedidas.cintura" />
+    </div>
+    <div class="mb-3">
+        <label for="numpor" class="form-label">Avance en Porcenta %</label>
+        <InputNumber id="numpor" class="form-control" @bind-Value="lasmedidas.porcentajeD" />
+    </div>
+    <div class="mb-3">
+        <label for="numId" class="form-label">Id del Cliente</label>
+        <InputNumber id="numId" class="form-control" @bind-Value="lasmedidas.CLientesId" />
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</EditForm>
+
+@code {
+    private Medidas lasmedidas = new Medidas();
+    private async void Guardar()
+    {
+        await http.PostAsJsonAsync("api/Medidas", lasmedidas);
+        navegar.NavigateTo("/MedidasT");
+    }
+}

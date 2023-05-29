@@ -1,0 +1,75 @@
+﻿@page "/MedidasT"
+@using Actividad_18.Shared.Models
+@inject HttpClient http
+@inject NavigationManager navegar
+
+
+<h3>Medidas Totales</h3>
+
+<button class="btn btn-primary" @onclick=Agregar><span class="oi oi-plus"> Agregar Medida</span></button>
+
+@if (lasmedidas == null)
+{
+    <h2>Cargando ...</h2>
+}else if (lasmedidas.Count() == 0)
+{
+    <h2>No existen Registros</h2>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var i in lasmedidas)
+            {
+                <tr>
+                    <td>@i.Id</td>
+                    <td>@i.NombreCliente</td>
+                    <td>@i.peso</td>
+                    <td>@i.altura</td>
+                    <td>@i.cintura</td>
+                    <td>@i.porcentajeD</td>
+                    <td>@i.CLientesId</td>
+                    <td><button class="btn btn-warning" @onclick="(()=>cambiar(Convert.ToInt32(i.Id)))">Cambiar Datos</button></td>
+                    <td><button class="btn btn-danger" @onclick="(()=>borrar(i))">Borrar</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<Medidas> lasmedidas = new List<Medidas>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        lasmedidas = await http.GetFromJsonAsync<List<Medidas>>("api/Medidas");
+    }
+
+    public void Agregar()
+    {
+        navegar.NavigateTo("/Medidas/Nuevo");
+    }
+
+    private void cambiar(int Id)
+    {
+        navegar.NavigateTo($"/Medidas/Editar/{Id}");
+    }
+
+    public async Task borrar(Medidas c)
+    {
+        await http.DeleteAsync($"api/Medidas/{c.Id}");
+        lasmedidas.Remove(c);
+    }
+}
