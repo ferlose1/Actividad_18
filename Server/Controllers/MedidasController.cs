@@ -83,11 +83,15 @@ namespace Actividad_18.Server.Controllers
                 return NotFound("Cliente not found.");
             }
 
+            // Asignar el valor del campo "nombre" del cliente al campo "nombre" de las medidas
+            medidas.NombreCliente = cliente.nombre;
+
             _context.Medidas.Add(medidas);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMedidas", new { id = medidas.Id }, medidas);
         }
+
 
         // DELETE: api/Medidas/5
         [HttpDelete("{id}")]

@@ -8,11 +8,6 @@
 
 <EditForm Model="lasmedidas" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-
-    <div class="mb-3">
-        <label for="txtNombre" class="form-label">Nombre</label>
-        <InputText id="txtNombre" class="form-control" @bind-Value="lasmedidas.NombreCliente" />
-    </div>
     <div class="mb-3">
         <label for="numPeso" class="form-label">Peso KG</label>
         <InputNumber id="numPeso" class="form-control" @bind-Value="lasmedidas.peso" />
